@@ -14,6 +14,7 @@
   copies or substantial portions of the Software.
 */
 
+
 using Android.App;
 using Android.Appwidget;
 using Android.Content;
@@ -21,16 +22,15 @@ using Android.Bluetooth;
 using Android.Util;
 using Android.Widget;
 
-namespace BluetoothWidget
+namespace BluetoothToggleWidget
 {
-  // see https://developer.android.com/guide/topics/appwidgets/index.html
-  // and http://stackoverflow.com/questions/4073907/update-android-widget-from-activity?rq=1
-  [BroadcastReceiver(Label = "Bluetooth Widget")]
-  [IntentFilter(new string[] { "android.appwidget.action.APPWIDGET_UPDATE", BluetoothAdapter.ActionStateChanged })]
+
+  [BroadcastReceiver(Label = "Bluetooth Toggle Widget")]
+  [IntentFilter(new string[] { "appwidget.action.APPWIDGET_UPDATE", BluetoothAdapter.ActionStateChanged })]
   [MetaData("android.appwidget.provider", Resource = "@xml/bt_widget")]
-  public class BTWidget : AppWidgetProvider
+  public class BTToggleWidget : AppWidgetProvider
   {
-    private const string APP_NAME = "BTWidget";
+    private const string APP_NAME = "BTToggleWidget";
 
     /// <summary>
     /// This event fires for every intent you're filtering for. There can be lots of them,
@@ -88,25 +88,25 @@ namespace BluetoothWidget
       int imgResource = Resource.Drawable.bluetooth_off;
       switch((Android.Bluetooth.State)newState)
       {
-        case Android.Bluetooth.State.Off:
-        case Android.Bluetooth.State.TurningOn:
-          {
-            imgResource = Resource.Drawable.bluetooth_off;
-            break;
-          }
+      case Android.Bluetooth.State.Off:
+      case Android.Bluetooth.State.TurningOn:
+        {
+          imgResource = Resource.Drawable.bluetooth_off;
+          break;
+        }
 
-        case Android.Bluetooth.State.On:
-        case Android.Bluetooth.State.TurningOff:
-          {
-            imgResource = Resource.Drawable.bluetooth_on;
-            break;
-          }
+      case Android.Bluetooth.State.On:
+      case Android.Bluetooth.State.TurningOff:
+        {
+          imgResource = Resource.Drawable.bluetooth_on;
+          break;
+        }
 
-        default:
-          {
-            imgResource = Resource.Drawable.bluetooth_off;
-            break;
-          }
+      default:
+        {
+          imgResource = Resource.Drawable.bluetooth_off;
+          break;
+        }
       }
 
       remoteViews.SetImageViewResource(Resource.Id.imgBluetooth, imgResource);
