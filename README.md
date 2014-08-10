@@ -1,4 +1,4 @@
 xamarin-bluetooth-toggle-widget
 ===============================
 
-Enabling/disabling Bluetooth with a widget (how to)
+How to enable/disable Bluetooth with a Xamarin widget. This is a work in progress.
