@@ -72,6 +72,14 @@
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable\bluetooth_connected.png" />
+    <AndroidResource Include="Resources\drawable\bluetooth_off.png" />
+    <AndroidResource Include="Resources\drawable\bluetooth_on.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\bluetooth_connected.png" />
+    <AndroidResource Include="Resources\drawable-ldpi\bluetooth_connected.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\bluetooth_connected.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\bluetooth_connected.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\bluetooth_connected.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Icon.png" />
