@@ -27,7 +27,7 @@ namespace BluetoothToggleWidget
 
 
   [BroadcastReceiver(Label = "Bluetooth Toggle Widget")]
-  [IntentFilter(new string[] { "android.appwidget.action.APPWIDGET_UPDATE", BluetoothAdapter.ActionStateChanged })]
+  [IntentFilter(new string[] { "android.appwidget.action.APPWIDGET_UPDATE", BluetoothAdapter.ActionStateChanged, BluetoothAdapter.ActionConnectionStateChanged })]
   [MetaData("android.appwidget.provider", Resource = "@xml/bt_widget")]
   public class BTToggleWidget : AppWidgetProvider
   {
@@ -59,6 +59,13 @@ namespace BluetoothToggleWidget
         ProcessBTStateChangeMessage(context, intent);
         return;
       }
+
+      if(intent.Action == Android.Bluetooth.BluetoothAdapter.ActionConnectionStateChanged)
+      {
+        Log.Info(APP_NAME, "Received BT Action State change message");
+        ProcessBTConnectionStateChangeMessage(context, intent);
+        return;
+      }
     }
 
     private void ProcessBTStateChangeMessage(Context context, Intent intent)
@@ -66,6 +73,16 @@ namespace BluetoothToggleWidget
       int prevState = intent.GetIntExtra(BluetoothAdapter.ExtraPreviousState, -1);
       int newState = intent.GetIntExtra(BluetoothAdapter.ExtraState, -1);
       string message = string.Format("Bluetooth State Change from {0} to {1}", prevState, newState);
+      Log.Info(APP_NAME, message);
+
+      UpdateWidgetDisplay(context, newState);
+    }
+
+    void ProcessBTConnectionStateChangeMessage(Context context, Intent intent)
+    {
+      int prevState = intent.GetIntExtra(BluetoothAdapter.ExtraPreviousConnectionState, -1);
+      int newState = intent.GetIntExtra(BluetoothAdapter.ExtraConnectionState, -1);
+      string message = string.Format("Bluetooth Connection State Change from {0} to {1}", prevState, newState);
       Log.Info(APP_NAME, message);
 
       UpdateWidgetDisplay(context, newState);
@@ -80,34 +97,53 @@ namespace BluetoothToggleWidget
     {
       var appWidgetManager = AppWidgetManager.GetInstance(context);
       var remoteViews = new RemoteViews(context.PackageName, Resource.Layout.initial_layout);
-      Log.Debug(APP_NAME, "this.GetType().ToString(): {0}", this.GetType().ToString());
+      // Log.Debug(APP_NAME, "this.GetType().ToString(): {0}", this.GetType().ToString());
 
       var thisWidget = new ComponentName(context, this.Class);
-      Log.Debug(APP_NAME, thisWidget.FlattenToString());
-      Log.Debug(APP_NAME, "remoteViews: {0}", remoteViews.ToString());
+      // Log.Debug(APP_NAME, thisWidget.FlattenToString());
+      // Log.Debug(APP_NAME, "remoteViews: {0}", remoteViews.ToString());
 
       int imgResource = Resource.Drawable.bluetooth_off;
       switch((Android.Bluetooth.State)newState)
       {
-      case Android.Bluetooth.State.Off:
-      case Android.Bluetooth.State.TurningOn:
-        {
-          imgResource = Resource.Drawable.bluetooth_off;
-          break;
-        }
+        case Android.Bluetooth.State.Off:
+        case Android.Bluetooth.State.TurningOn:
+          {
+            imgResource = Resource.Drawable.bluetooth_off;
+            break;
+          }
 
-      case Android.Bluetooth.State.On:
-      case Android.Bluetooth.State.TurningOff:
-        {
-          imgResource = Resource.Drawable.bluetooth_on;
-          break;
-        }
+        case Android.Bluetooth.State.On:
+        case Android.Bluetooth.State.TurningOff:
+          {
+            imgResource = Resource.Drawable.bluetooth_on;
+            break;
+          }
 
-      default:
-        {
-          imgResource = Resource.Drawable.bluetooth_off;
-          break;
-        }
+        case Android.Bluetooth.State.Connecting:
+        case Android.Bluetooth.State.Disconnecting:
+          {
+            imgResource = Resource.Drawable.bluetooth_connecting;
+            break;
+          }
+
+        case Android.Bluetooth.State.Connected:
+          {
+            imgResource = Resource.Drawable.bluetooth_connected;
+            break;
+          }
+
+        case Android.Bluetooth.State.Disconnected:
+          {
+            imgResource = Resource.Drawable.bluetooth_on;
+            break;
+          }
+
+        default:
+          {
+            imgResource = Resource.Drawable.bluetooth_off;
+            break;
+          }
       }
 
       remoteViews.SetImageViewResource(Resource.Id.imgBluetooth, imgResource);
