@@ -25,8 +25,9 @@ using Android.Widget;
 namespace BluetoothToggleWidget
 {
 
+
   [BroadcastReceiver(Label = "Bluetooth Toggle Widget")]
-  [IntentFilter(new string[] { "appwidget.action.APPWIDGET_UPDATE", BluetoothAdapter.ActionStateChanged })]
+  [IntentFilter(new string[] { "android.appwidget.action.APPWIDGET_UPDATE", BluetoothAdapter.ActionStateChanged })]
   [MetaData("android.appwidget.provider", Resource = "@xml/bt_widget")]
   public class BTToggleWidget : AppWidgetProvider
   {
