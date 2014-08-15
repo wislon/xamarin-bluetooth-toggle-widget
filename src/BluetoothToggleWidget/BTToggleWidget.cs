@@ -50,6 +50,13 @@ namespace BluetoothToggleWidget
         var currentState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.State;
         Log.Info(APP_NAME, "BT adapter state currently {0}", currentState);
         UpdateWidgetDisplay(context, (int)currentState);
+
+        if(currentState == State.On)
+        {
+          Log.Debug(APP_NAME, "Checking bluetooth connection state");
+          ProfileState currentConnectedState = GetBluetoothConnectionState();
+          UpdateWidgetDisplay(context, (int)currentConnectedState);
+        }
         return;
       }
 
@@ -67,6 +74,51 @@ namespace BluetoothToggleWidget
         return;
       }
     }
+
+    private ProfileState GetBluetoothConnectionState()
+    {
+      ProfileState connectionState = ProfileState.Disconnected;
+      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.A2dp);
+      if(connectionState == ProfileState.Connected)
+      {
+        Log.Info(APP_NAME, "Connected to A2DP");
+        return connectionState;
+      }
+
+      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.Gatt);
+      if(connectionState == ProfileState.Connected)
+      {
+        Log.Info(APP_NAME, "Connected to Gatt");
+        return connectionState;
+      }
+
+      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.GattServer);
+      if(connectionState == ProfileState.Connected)
+      {
+        Log.Info(APP_NAME, "Connected to Gatt Server");
+        return connectionState;
+      }
+
+      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.Headset);
+      if(connectionState == ProfileState.Connected)
+      {
+        Log.Info(APP_NAME, "Connected to Headset");
+        return connectionState;
+      }
+
+      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.Health);
+      if(connectionState == ProfileState.Connected)
+      {
+        Log.Info(APP_NAME, "Connected to a health device");
+        return connectionState;
+      }
+
+      Log.Info(APP_NAME, "Not connected to a device matching any of the known profiles");
+      return connectionState;
+
+    }
+
+
 
     private void ProcessBTStateChangeMessage(Context context, Intent intent)
     {
