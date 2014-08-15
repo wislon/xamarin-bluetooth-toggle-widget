@@ -115,10 +115,7 @@ namespace BluetoothToggleWidget
 
       Log.Info(APP_NAME, "Not connected to a device matching any of the known profiles");
       return connectionState;
-
     }
-
-
 
     private void ProcessBTStateChangeMessage(Context context, Intent intent)
     {
@@ -130,7 +127,7 @@ namespace BluetoothToggleWidget
       UpdateWidgetDisplay(context, newState);
     }
 
-    void ProcessBTConnectionStateChangeMessage(Context context, Intent intent)
+    private void ProcessBTConnectionStateChangeMessage(Context context, Intent intent)
     {
       int prevState = intent.GetIntExtra(BluetoothAdapter.ExtraPreviousConnectionState, -1);
       int newState = intent.GetIntExtra(BluetoothAdapter.ExtraConnectionState, -1);
@@ -156,7 +153,8 @@ namespace BluetoothToggleWidget
       // Log.Debug(APP_NAME, "remoteViews: {0}", remoteViews.ToString());
 
       int imgResource = Resource.Drawable.bluetooth_off;
-      switch((Android.Bluetooth.State)newState)
+      State currentState = (Android.Bluetooth.State)newState;
+      switch(currentState)
       {
         case Android.Bluetooth.State.Off:
         case Android.Bluetooth.State.TurningOn:
@@ -198,7 +196,17 @@ namespace BluetoothToggleWidget
           }
       }
 
-      remoteViews.SetImageViewResource(Resource.Id.imgBluetooth, imgResource);
+      // remoteViews.SetImageViewResource(Resource.Id.imgBluetooth, imgResource);
+      // depending on current State of the adapter (on or off), allow a tap of the widget to 
+      // toggle it. we do this by hooking up a pending intent to the imageButton's OnClick event
+      if(currentState == State.Off)
+      {
+        Log.Info(APP_NAME, "State is off, adding click delegate to turn on BT ");
+        Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ActionRequestEnable);
+        PendingIntent pendingIntent = PendingIntent.GetActivity(context, 0, enableBluetoothIntent, PendingIntentFlags.OneShot);
+        remoteViews.SetOnClickPendingIntent(Resource.Id.imgBluetooth, pendingIntent);
+      }
+
       appWidgetManager.UpdateAppWidget(thisWidget, remoteViews);
     }
   }
