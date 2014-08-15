@@ -196,7 +196,7 @@ namespace BluetoothToggleWidget
           }
       }
 
-      // remoteViews.SetImageViewResource(Resource.Id.imgBluetooth, imgResource);
+      remoteViews.SetImageViewResource(Resource.Id.imgBluetooth, imgResource);
       // depending on current State of the adapter (on or off), allow a tap of the widget to 
       // toggle it. we do this by hooking up a pending intent to the imageButton's OnClick event
       if(currentState == State.Off)
