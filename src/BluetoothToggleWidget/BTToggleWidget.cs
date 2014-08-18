@@ -21,13 +21,18 @@ using Android.Content;
 using Android.Bluetooth;
 using Android.Util;
 using Android.Widget;
+using System.Linq;
 
 namespace BluetoothToggleWidget
 {
 
 
   [BroadcastReceiver(Label = "Bluetooth Toggle Widget")]
-  [IntentFilter(new string[] { "android.appwidget.action.APPWIDGET_UPDATE", BluetoothAdapter.ActionStateChanged, BluetoothAdapter.ActionConnectionStateChanged })]
+  [IntentFilter(new string[]
+  { "android.appwidget.action.APPWIDGET_UPDATE", 
+    BluetoothAdapter.ActionStateChanged, 
+    BluetoothAdapter.ActionConnectionStateChanged
+  })]
   [MetaData("android.appwidget.provider", Resource = "@xml/bt_widget")]
   public class BTToggleWidget : AppWidgetProvider
   {
@@ -52,7 +57,7 @@ namespace BluetoothToggleWidget
 
         if(currentState == State.On)
         {
-          Log.Debug(Constants.APP_NAME, "Checking bluetooth connection state");
+          Log.Debug(Constants.APP_NAME, "Checking bluetooth connection state...");
           ProfileState currentConnectedState = GetBluetoothConnectionState();
           UpdateWidgetDisplay(context, (int)currentConnectedState);
         }
@@ -68,52 +73,23 @@ namespace BluetoothToggleWidget
 
       if(intent.Action == Android.Bluetooth.BluetoothAdapter.ActionConnectionStateChanged)
       {
-        Log.Info(Constants.APP_NAME, "Received BT Action State change message");
+        Log.Info(Constants.APP_NAME, "Received BT Connection State change message");
         ProcessBTConnectionStateChangeMessage(context, intent);
         return;
       }
     }
 
+    /// <summary>
+    /// Clunky implementation of getting connection state for the different profiles.
+    /// Sufficient for our purposes though. Could expand it to include what we're connected
+    /// to as well.
+    /// </summary>
+    /// <returns>The bluetooth connection state.</returns>
     private ProfileState GetBluetoothConnectionState()
     {
-      ProfileState connectionState = ProfileState.Disconnected;
-      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.A2dp);
-      if(connectionState == ProfileState.Connected)
-      {
-        Log.Info(Constants.APP_NAME, "Connected to A2DP");
-        return connectionState;
-      }
-
-      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.Gatt);
-      if(connectionState == ProfileState.Connected)
-      {
-        Log.Info(Constants.APP_NAME, "Connected to Gatt");
-        return connectionState;
-      }
-
-      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.GattServer);
-      if(connectionState == ProfileState.Connected)
-      {
-        Log.Info(Constants.APP_NAME, "Connected to Gatt Server");
-        return connectionState;
-      }
-
-      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.Headset);
-      if(connectionState == ProfileState.Connected)
-      {
-        Log.Info(Constants.APP_NAME, "Connected to Headset");
-        return connectionState;
-      }
-
-      connectionState = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(ProfileType.Health);
-      if(connectionState == ProfileState.Connected)
-      {
-        Log.Info(Constants.APP_NAME, "Connected to a health device");
-        return connectionState;
-      }
-
-      Log.Info(Constants.APP_NAME, "Not connected to a device matching any of the known profiles");
-      return connectionState;
+      var profileTypes = new ProfileType[] { ProfileType.A2dp, ProfileType.Gatt, ProfileType.GattServer, ProfileType.Headset, ProfileType.Health };
+      bool connected = profileTypes.Any(pt => BluetoothAdapter.DefaultAdapter.GetProfileConnectionState(pt) == ProfileState.Connected);
+      return connected ? ProfileState.Connected : ProfileState.Disconnected;
     }
 
     private void ProcessBTStateChangeMessage(Context context, Intent intent)
@@ -201,7 +177,7 @@ namespace BluetoothToggleWidget
       {
         case State.Off:
           {
-            Log.Info(Constants.APP_NAME, "State is off, adding click delegate to turn on BT ");
+            Log.Info(Constants.APP_NAME, "Adapter state is 'off', adding click delegate to turn on BT ");
             Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ActionRequestEnable);
             PendingIntent pendingIntent = PendingIntent.GetActivity(context, 0, enableBluetoothIntent, PendingIntentFlags.UpdateCurrent);
             remoteViews.SetOnClickPendingIntent(Resource.Id.imgBluetooth, pendingIntent);
@@ -209,6 +185,7 @@ namespace BluetoothToggleWidget
           }
         default:
           {
+            Log.Info(Constants.APP_NAME, string.Format("Adapter state is {0}, adding click delegate to turn off BT", currentState.ToString()));
             Intent disableBluetoothIntent = new Intent(context, typeof(DisableBluetoothService));
             PendingIntent pendingIntent = PendingIntent.GetService(context, 0, disableBluetoothIntent, PendingIntentFlags.UpdateCurrent);
             remoteViews.SetOnClickPendingIntent(Resource.Id.imgBluetooth, pendingIntent);
