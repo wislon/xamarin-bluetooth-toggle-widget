@@ -96,7 +96,7 @@ namespace BluetoothToggleWidget
     {
       int prevState = intent.GetIntExtra(BluetoothAdapter.ExtraPreviousState, -1);
       int newState = intent.GetIntExtra(BluetoothAdapter.ExtraState, -1);
-      string message = string.Format("Bluetooth State Change from {0} to {1}", prevState, newState);
+      string message = string.Format("Bluetooth Adapter state change from {0} to {1}", (State)prevState, (State)newState);
       Log.Info(Constants.APP_NAME, message);
 
       UpdateWidgetDisplay(context, newState);
@@ -106,7 +106,7 @@ namespace BluetoothToggleWidget
     {
       int prevState = intent.GetIntExtra(BluetoothAdapter.ExtraPreviousConnectionState, -1);
       int newState = intent.GetIntExtra(BluetoothAdapter.ExtraConnectionState, -1);
-      string message = string.Format("Bluetooth Connection State Change from {0} to {1}", prevState, newState);
+      string message = string.Format("Bluetooth Connection state change from {0} to {1}", (State)prevState, (State)newState);
       Log.Info(Constants.APP_NAME, message);
 
       UpdateWidgetDisplay(context, newState);
