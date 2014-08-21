@@ -11,7 +11,7 @@ This is a simple tutorial/how-to on building a widget for an Android device, usi
 I've used an example of enabling/disabling Bluetooth because 
 * It's slightly more complex than a pointless "hello world!" widget that doesn't actually show you anything.
 * I needed a widget to do this, so I built one. Yes, I could have just downloaded one, but where's the fun in that? And this way you may benefit too.
-* It's reproducible enough that it can be used to build a similar one for wi-fi or NFC or something else.
+* It's reproducible enough that it can be used to build a similar one for wi-fi, or location, or NFC or something else.
 
 As it stands, this widget does the following:
 
