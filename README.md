@@ -22,4 +22,5 @@ It is based on the (simpler) [xamarin-bluetooth-status-widget](https://github.co
 
 ####License
 Copyright (c) 2014, John Wilson.
+
 _This code is released under the [MIT license](LICENSE). However one of the bluetooth symbol images is provided by a third-party, and was distributed as 'freeware, not for commercial use', so if you plan on using the code in this repo as the basis for a commercial product (go right ahead!), you'll need to source your bluetooth symbol image(s) from elsewhere._
