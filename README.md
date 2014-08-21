@@ -3,6 +3,8 @@ xamarin-bluetooth-toggle-widget
 
 This is a simple tutorial/how-to on building a widget for an Android device, using Xamarin. 
 
+![bluetooth logo](https://github.com/wislon/xamarin-bluetooth-toggle-widget/blob/master/src/BluetoothWidget/Resources/drawable-xhdpi/bluetooth_on.png)![bluetooth logo](https://github.com/wislon/xamarin-bluetooth-toggle-widget/blob/master/src/BluetoothWidget/Resources/drawable-xhdpi/bluetooth_off.png)![bluetooth logo](https://github.com/wislon/xamarin-bluetooth-toggle-widget/blob/master/src/BluetoothWidget/Resources/drawable-xhdpi/bluetooth_connected.png)
+
 I've used an example of enabling/disabling Bluetooth because 
 * it's complex enough that it demonstrates use of an `ImageView`, `IntentService`, intents, broadcasts, and intent filtering (beats a simple, pointless "hello world!" widget that doesn't actually show you anything), and 
 * I needed a widget to do this, so I built one. Yes, I could have just downloaded one, but where's the fun in that? And this way, you may benefit too.
