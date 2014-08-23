@@ -18,7 +18,7 @@ As it stands, this widget does the following:
 * Reacts and changes its display based on power-state and connectivity-state changes in your device's built-in adapter.
 * Toggles the enabling/disabling of the default Bluetooth adapter by tapping the widget.
 
-It is based on the (simpler) [xamarin-bluetooth-status-widget](https://github.com/wislon/xamarin-bluetooth-status-widget), which I built a couple of weeks ago, and promised to extend to allow toggling and monitoring of connectivity status too.
+It is based on the (simpler) [xamarin-bluetooth-status-widget](https://github.com/wislon/xamarin-bluetooth-status-widget), which I built a couple of weeks ago, and promised to extend to allow toggling and monitoring of connectivity status too. And to show you how it all fits together, there's a post on my blog over at [wislon.io](http://wislon.io/posts/2014/08/23/make-a-xamarin-android-widget-to-enable-disable-bluetooth)
 
 ####License
 Copyright (c) 2014, John Wilson.
