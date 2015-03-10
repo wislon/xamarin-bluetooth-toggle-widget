@@ -20,6 +20,8 @@ As it stands, this widget does the following:
 
 It is based on the (simpler) [xamarin-bluetooth-status-widget](https://github.com/wislon/xamarin-bluetooth-status-widget), which I built a couple of weeks ago, and promised to extend to allow toggling and monitoring of connectivity status too. And to show you how it all fits together, there's a post on my blog over at [wislon.io](http://wislon.io/posts/2014/08/23/make-a-xamarin-android-widget-to-enable-disable-bluetooth)
 
+I've also released it as an app on the [Google Play store](https://play.google.com/store/apps/details?id=io.wislon.BluetoothToggleWidget), because reasons.
+
 ####License
 Copyright (c) 2014, John Wilson.
 
